@@ -310,6 +310,13 @@ td button:last-child {
   background:#f9fafb;
 }
 
+#dbModal{
+  z-index: 99999;
+}
+
+#databaseModal{
+  z-index: 9999;
+}
 
 </style>
 </head>
@@ -842,7 +849,12 @@ function renderDB(){
 
   );
 
-  filtered.forEach((row,index)=>{
+  filtered.forEach((row)=>{
+
+    const realIndex = dbData.findIndex(d =>
+      d.nik === row.nik &&
+      d.rek === row.rek
+    );
 
     tbody.innerHTML += `
       <tr>
@@ -850,7 +862,7 @@ function renderDB(){
         <td>${row.nama}</td>
         <td>${row.rek}</td>
         <td>
-          <button onclick="deleteDB(${index})">
+          <button onclick="deleteDB(${realIndex})">
             Delete
           </button>
         </td>
@@ -966,6 +978,12 @@ function deleteAllDB(){
   localStorage.removeItem('rekeningDB');
 
   renderDB();
+
+  const dbFile = document.getElementById('dbFile');
+
+  dbFile.value = '';
+  dbFile.type = '';
+  dbFile.type = 'file';
 
   alert('Seluruh database berhasil dihapus');
 }
