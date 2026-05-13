@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payroll BCA KlikBCA Bisnis</title>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f4f6fb;
+  margin: 0;
+}
+
+.header {
+  background: #1e3a8a;
+  color: white;
+  padding: 15px 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 20px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 13px;
+  color: #555;
+  display:block;
+  margin-bottom:4px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-upload { background: #6366f1; color: white; }
+.btn-generate { background: #16a34a; color: white; }
+.btn-reset { background: #dc2626; color: white; }
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.card {
+  background: #f9fafb;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.card h3 { margin: 5px 0; }
+.card p { font-size: 12px; color: #666; }
+
+.table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+th {
+  background: #eef2ff;
+}
+
+.error {
+  background: #fee2e2;
+}
+
+.footer-note {
+  margin-top: 15px;
+  font-size: 12px;
+  color: #888;
+}
+
+.custom-file {
+  font-size: 14px;
+}
+.footer-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contributor {
+  font-size: 12px;
+  color: #aaa;
+  font-weight: bold;
+  font-style: italic;
+}
+.custom-file::file-selector-button {
+  display: none; /* sembunyikan tombol */
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.modal-content input {
+  margin-bottom: 10px;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.modal-actions button {
+  width: 48%;
+}
+
+td:last-child {
+  text-align: center;
+}
+
+td button {
+  margin: 2px;
+}
+
+td button:first-child {
+  background: #3b82f6;
+  color: white;
+}
+
+td button:last-child {
+  background: #ef4444;
+  color: white;
+}
+
+.tab-menu{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.tab-btn{
+  background:#e5e7eb;
+  color:#111827;
+}
+
+.tab-btn.active{
+  background:#1e3a8a;
+  color:white;
+}
+
+.tab-content{
+  display:none;
+}
+
+.tab-content.active{
+  display:block;
+}
+
+.db-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+}
+
+.db-table th,
+.db-table td{
+  border:1px solid #ddd;
+  padding:8px;
+}
+
+.db-table th{
+  background:#eef2ff;
+}
+
+.db-actions{
+  margin-top:15px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.database-modal-content{
+  width:95%;
+  max-width:1200px;
+  height:90vh;
+  background:white;
+  border-radius:16px;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.database-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px;
+  border-bottom:1px solid #eee;
+}
+
+.database-header h2{
+  margin:0;
+}
+
+.database-header button{
+  background:#ef4444;
+  color:white;
+  border:none;
+  width:40px;
+  height:40px;
+  border-radius:8px;
+  font-size:18px;
+}
+
+.db-toolbar{
+  padding:15px 20px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  border-bottom:1px solid #eee;
+}
+
+.db-toolbar input{
+  max-width:300px;
+}
+
+.database-table-wrapper{
+  flex:1;
+  overflow:auto;
+  padding:20px;
+}
+
+.db-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.db-table th{
+  position:sticky;
+  top:0;
+  background:#eef2ff;
+  z-index:10;
+}
+
+.db-table th,
+.db-table td{
+  padding:10px;
+  border:1px solid #ddd;
+}
+
+.db-table tr:hover{
+  background:#f9fafb;
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="header">Payroll BCA Generator - KlikBCA Bisnis</div>
+
+<div class="container">
+
+<div id="dbModal" class="modal">
+  <div class="modal-content">
+
+    <h3>Tambah Database</h3>
+
+    <label>NIK</label>
+    <input type="text" id="db_nik">
+
+    <label>Nama</label>
+    <input type="text" id="db_nama">
+
+    <label>No Rekening</label>
+    <input type="text" id="db_rek">
+
+    <div class="modal-actions">
+      <button onclick="saveDB()">Simpan</button>
+      <button onclick="closeDBModal()">Batal</button>
+    </div>
+
+  </div>
+</div>
+
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <h3>Input Data Manual</h3>
+
+    <label>NIK</label>
+    <input type="text" id="m_nik">
+
+    <label>Nama</label>
+    <input type="text" id="m_nama">
+
+    <label>No Rekening</label>
+    <input type="text" id="m_rek">
+
+    <label>Nominal</label>
+    <input type="text" id="m_nominal">
+
+    <div class="modal-actions">
+      <button onclick="saveManual()">Simpan</button>
+      <button onclick="closeModal()">Batal</button>
+    </div>
+  </div>
+</div>
+
+   <div class="form-grid">
+
+  <div>
+    <label>Tanggal</label>
+    <input
+      type="text"
+      id="tgl"
+      maxlength="2"
+      placeholder="DD"
+    >
+  </div>
+
+  <div>
+    <label>Bulan Tahun</label>
+    <input
+      type="text"
+      id="bulan"
+      maxlength="6"
+      placeholder="MMYYYY"
+    >
+  </div>
+
+  <div>
+    <label>Upload File</label>
+
+    <input
+      type="file"
+      id="fileInput"
+      accept=".csv,.txt"
+      class="custom-file"
+    >
+  </div>
+
+</div>
+
+<div class="actions">
+  <button class="btn-upload" onclick="document.getElementById('fileInput').click()">Upload File</button>
+  <button class="btn-generate" onclick="generateTXT()">Generate File</button>
+  <button class="btn-reset" onclick="resetData()">Reset</button>
+<button onclick="openModal()">Tambahkan</button>
+<button onclick="openDatabaseModal()">
+  Master Database
+</button>
+</div>
+
+<div class="summary">
+  <div class="card">
+    <p>Total Valid</p>
+    <h3 id="validCount">0</h3>
+  </div>
+  <div class="card">
+    <p>Total Error</p>
+    <h3 id="errorCount">0</h3>
+  </div>
+  <div class="card">
+    <p>Total Nominal</p>
+    <h3 id="totalNominal">0</h3>
+  </div>
+</div>
+
+<div class="table-container">
+<table id="table">
+<thead>
+<tr>
+<th>NIK</th>
+<th>Nama</th>
+<th>Rekening</th>
+<th>Nominal</th>
+<th>Error</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+<div class="footer-note footer-flex">
+  <span>* Pastikan semua data valid sebelum generate file untuk menghindari error upload di KlikBCA</span>
+  <span class="contributor">Powered by d'arch</span>
+</div>
+
+<div id="databaseModal" class="modal">
+
+  <div class="database-modal-content">
+
+    <div class="database-header">
+
+      <h2>Master Database Rekening</h2>
+
+      <button onclick="closeDatabaseModal()">
+        ✕
+      </button>
+
+    </div>
+
+    <div class="db-toolbar">
+
+      <input
+        type="text"
+        id="dbSearch"
+        placeholder="Cari NIK / Nama / Rekening"
+        onkeyup="renderDB()"
+      >
+
+      <button class="btn-generate" onclick="openDBModal()">
+        Tambah
+      </button>
+
+      <button class="btn-upload"
+        onclick="document.getElementById('dbFile').click()">
+        Import CSV
+      </button>
+
+      <button class="btn-upload"
+        onclick="exportDB()">
+        Export CSV
+      </button>
+
+      <button class="btn-reset"
+        onclick="deleteAllDB()">
+        Delete All
+      </button>
+
+      <input type="file" id="dbFile" hidden>
+
+    </div>
+
+    <div class="database-table-wrapper">
+
+      <table class="db-table">
+
+        <thead>
+          <tr>
+            <th>NIK</th>
+            <th>Nama</th>
+            <th>Rekening</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="dbBody"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+let editIndex = null;
+let data = [];
+
+let dbData = JSON.parse(localStorage.getItem('rekeningDB') || '[]');
+
+document.getElementById('fileInput').addEventListener('change', handleFile);
+
+function toProperCase(str) {
+  return str.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+}
+
+function handleFile(e) {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const rows = e.target.result.split('\n').filter(r => r.trim() !== '');
+
+    data = rows.map(r => {
+      let cols = r.includes('|') ? r.split('|') : r.split(',');
+      return {
+        rek: cols[0]?.trim(),
+        nominal: cols[1]?.trim(),
+        nik: cols[2]?.trim(),
+        nama: cols[3]?.trim(),
+        error: ''
+      };
+    });
+
+    validateAll();
+    render();
+  };
+  reader.readAsText(file);
+}
+
+function validateRow(row) {
+  let errors = [];
+
+const match = dbData.find(d =>
+  d.nik === row.nik &&
+  d.rek === row.rek
+);
+
+if (!match) {
+  errors.push('Data tidak sesuai database');
+}
+  if (!/^\d{8}$/.test(row.nik)) errors.push('NIK invalid');
+  if (!row.nama || row.nama.length > 26) errors.push('Nama invalid');
+  if (!/^\d{10}$/.test(row.rek)) errors.push('Rekening invalid');
+  if (isNaN(row.nominal) || Number(row.nominal) < 0) errors.push('Nominal invalid');
+
+  row.error = errors.join(', ');
+}
+
+function validateAll() {
+  data.forEach(validateRow);
+}
+
+function padLeft(str, length) {
+  return str.toString().padStart(length, '0');
+}
+
+function padRight(str, length) {
+  return str.toString().padEnd(length, ' ');
+}
+
+function render() {
+  const tbody = document.querySelector('#table tbody');
+  tbody.innerHTML = '';
+
+  let valid = 0;
+  let error = 0;
+  let total = 0;
+
+  data.forEach((row, index) => {
+    const tr = document.createElement('tr');
+    if (row.error) tr.classList.add('error');
+
+    ['nik','nama','rek','nominal'].forEach(field => {
+      const td = document.createElement('td');
+      td.contentEditable = true;
+      td.innerText = row[field];
+      td.oninput = (e) => {
+        row[field] = e.target.innerText;
+        validateRow(row);
+        render();
+      };
+      tr.appendChild(td);
+    });
+
+    const errTd = document.createElement('td');
+    errTd.innerText = row.error;
+    tr.appendChild(errTd);
+ 
+// ✅ ACTION BUTTON
+  const actionTd = document.createElement('td');
+
+  actionTd.innerHTML = `
+    <button onclick="editRow(${index})">Edit</button>
+    <button onclick="deleteRow(${index})">Delete</button>
+  `;
+
+  tr.appendChild(actionTd);
+
+    if (!row.error) {
+      valid++;
+      total += Number(row.nominal);
+    } else {
+      error++;
+    }
+
+    tbody.appendChild(tr);
+  });
+
+  document.getElementById('validCount').innerText = valid;
+  document.getElementById('errorCount').innerText = error;
+  document.getElementById('totalNominal').innerText = total;
+}
+
+function generateTXT() {
+  const client = '4580';
+  const tgl = document.getElementById('tgl').value;
+  const bulan = document.getElementById('bulan').value;
+
+  const validData = data.filter(d => !d.error);
+
+  if (!tgl || !bulan) {
+    alert('Isi tanggal & bulan');
+    return;
+  }
+
+  if (validData.length === 0) {
+    alert('Tidak ada data valid!');
+    return;
+  }
+
+  let total = validData.reduce((sum, d) => sum + Number(d.nominal), 0);
+
+  let header =
+    '000000000000' +
+    client +
+    '0034KSEI'+ tgl 
+    +'01458300297101MF00'+
+    padLeft(validData.length, 3) +'00'+
+    padLeft(total, 12) +
+    '.00' +
+    bulan;
+
+  let lines = validData.map(d => {
+    let rek = '0'+padLeft(d.rek, 10);
+    let trxCount ='00';
+    let nominal = padLeft(d.nominal, 11)+'00';
+
+    let nik =d.nik;
+    let nikFormatted = `${nik.substring(0,3)}.${nik.substring(3,7)}.${nik.substring(7)}`;
+
+    let namaRaw = toProperCase(d.nama);
+    let nama = padRight(namaRaw, 26);
+    let fullNama = padRight(nama, 33);
+
+    return rek + trxCount + nominal + nikFormatted + fullNama + '.';
+  });
+
+  const content = [header, ...lines].join('\n');
+
+  const blob = new Blob([content], { type: 'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `result_FL_${bulan}${tgl}.txt`;
+  a.click();
+}
+function openModal() {
+  document.getElementById('modal').style.display = 'flex';
+}
+
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+function saveManual() {
+  const nik = document.getElementById('m_nik').value;
+  const nama = document.getElementById('m_nama').value;
+  const rek = document.getElementById('m_rek').value;
+  const nominal = document.getElementById('m_nominal').value;
+
+  let row = {
+    nik: nik,
+    nama: nama,
+    rek: rek,
+    nominal: nominal,
+    error: ''
+  };
+
+  validateRow(row);
+
+  if (editIndex !== null) {
+    data[editIndex] = row; // update
+    editIndex = null;
+  } else {
+    data.push(row); // insert baru
+  }
+if (!nik || !nama || !rek || !nominal) {
+  alert('Semua field harus diisi');
+  return;
+}
+  render();
+  closeModal();
+
+  // clear form
+  document.getElementById('m_nik').value = '';
+  document.getElementById('m_nama').value = '';
+  document.getElementById('m_rek').value = '';
+  document.getElementById('m_nominal').value = '';
+}
+
+function editRow(index) {
+  const row = data[index];
+
+  document.getElementById('m_nik').value = row.nik;
+  document.getElementById('m_nama').value = row.nama;
+  document.getElementById('m_rek').value = row.rek;
+  document.getElementById('m_nominal').value = row.nominal;
+
+  editIndex = index;
+  openModal();
+}
+
+function deleteRow(index) {
+  if (confirm('Hapus data ini?')) {
+    data.splice(index, 1);
+    render();
+  }
+}
+
+function resetData() {
+
+  data = [];
+
+  // reset file input
+  document.getElementById('fileInput').value = '';
+  document.getElementById('fileInput').type = 'file';
+
+  render();
+}
+
+function switchTab(tabId){
+
+  document.querySelectorAll('.tab-content')
+    .forEach(t => t.classList.remove('active'));
+
+  document.querySelectorAll('.tab-btn')
+    .forEach(t => t.classList.remove('active'));
+
+  document.getElementById(tabId)
+    .classList.add('active');
+
+  event.target.classList.add('active');
+}
+
+function openDBModal(){
+  document.getElementById('dbModal').style.display='flex';
+}
+
+function closeDBModal(){
+  document.getElementById('dbModal').style.display='none';
+}
+
+function saveDB(){
+  const nik = document.getElementById('db_nik').value.trim();
+  const nama = document.getElementById('db_nama').value.trim();
+  const rek = document.getElementById('db_rek').value.trim();
+
+  if(!nik || !nama || !rek){
+    alert('Semua field wajib diisi');
+    return;
+  }
+
+ const duplicate = dbData.find(d =>
+  d.nik === nik &&
+  d.rek === rek
+);
+
+if(duplicate){
+  alert('Data duplicate ditemukan');
+  return;
+}
+
+dbData.push({
+  nik,
+  nama,
+  rek
+});
+
+  localStorage.setItem(
+    'rekeningDB',
+    JSON.stringify(dbData)
+  );
+
+  renderDB();
+  refreshPayrollValidation();
+  closeDBModal();
+
+  document.getElementById('db_nik').value='';
+  document.getElementById('db_nama').value='';
+  document.getElementById('db_rek').value='';
+}
+
+function renderDB(){
+
+  const tbody = document.getElementById('dbBody');
+
+  tbody.innerHTML='';
+
+  const keyword =
+    document.getElementById('dbSearch')?.value
+    ?.toLowerCase() || '';
+
+  const filtered = dbData.filter(d =>
+
+    d.nik.toLowerCase().includes(keyword) ||
+    d.nama.toLowerCase().includes(keyword) ||
+    d.rek.toLowerCase().includes(keyword)
+
+  );
+
+  filtered.forEach((row,index)=>{
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${row.nik}</td>
+        <td>${row.nama}</td>
+        <td>${row.rek}</td>
+        <td>
+          <button onclick="deleteDB(${index})">
+            Delete
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+function deleteDB(index){
+
+  if(confirm('Hapus database ini?')){
+
+    dbData.splice(index,1);
+
+    localStorage.setItem(
+      'rekeningDB',
+      JSON.stringify(dbData)
+    );
+
+    renderDB();
+
+  }
+}
+
+function exportDB(){
+
+  let csv = 'nik;nama;rek\n';
+
+  dbData.forEach(d=>{
+
+    csv += `${d.nik};${d.nama};${d.rek}\n`;
+
+  });
+
+  const blob = new Blob([csv], {
+    type:'text/csv'
+  });
+
+  const a = document.createElement('a');
+
+  a.href = URL.createObjectURL(blob);
+
+  a.download = 'master_rekening.csv';
+
+  a.click();
+}
+
+document.getElementById('dbFile')
+.addEventListener('change', importDB);
+
+function importDB(e){
+
+  const file = e.target.files[0];
+
+  const reader = new FileReader();
+
+  reader.onload = function(ev){
+
+    const rows = ev.target.result
+      .split('\n')
+      .filter(r=>r.trim()!=='');
+
+    rows.shift();
+
+    rows.forEach(r=>{
+
+      const cols = r.split(';');
+
+     const nik = cols[0]?.trim();
+const nama = cols[1]?.trim();
+const rek = cols[2]?.trim();
+
+const duplicate = dbData.find(d =>
+  d.nik === nik &&
+  d.rek === rek
+);
+
+if(!duplicate){
+
+  dbData.push({
+    nik,
+    nama,
+    rek
+  });
+
+}
+
+    });
+
+    localStorage.setItem(
+      'rekeningDB',
+      JSON.stringify(dbData)
+    );
+
+    renderDB();
+
+    alert('Import database berhasil');
+  };
+
+  reader.readAsText(file);
+}
+
+renderDB();
+
+function deleteAllDB(){
+
+  if(!confirm('Hapus seluruh master database rekening?')){
+    return;
+  }
+
+  dbData = [];
+
+  localStorage.removeItem('rekeningDB');
+
+  renderDB();
+
+  alert('Seluruh database berhasil dihapus');
+}
+
+function refreshPayrollValidation(){
+
+  validateAll();
+
+  render();
+}
+
+function openDatabaseModal(){
+
+  document.getElementById('databaseModal')
+    .style.display='flex';
+
+  renderDB();
+}
+
+function closeDatabaseModal(){
+
+  document.getElementById('databaseModal')
+    .style.display='none';
+}
+
+
+</script>
+
+</body>
+</html>
