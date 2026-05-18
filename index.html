@@ -591,56 +591,106 @@ function padRight(str, length) {
 }
 
 function render() {
+
   const tbody = document.querySelector('#table tbody');
+
   tbody.innerHTML = '';
 
   let valid = 0;
   let error = 0;
   let total = 0;
 
-  data.forEach((row, index) => {
+  // ERROR AKAN PINDAH KE ATAS
+  const sortedData = [...data].sort((a, b) => {
+
+    if (a.error && !b.error) return -1;
+
+    if (!a.error && b.error) return 1;
+
+    return 0;
+
+  });
+
+  sortedData.forEach((row) => {
+
+    const originalIndex = data.findIndex(d =>
+
+      d.nik === row.nik &&
+      d.rek === row.rek &&
+      d.nominal === row.nominal
+
+    );
+
     const tr = document.createElement('tr');
-    if (row.error) tr.classList.add('error');
+
+    if (row.error) {
+      tr.classList.add('error');
+    }
 
     ['nik','nama','rek','nominal'].forEach(field => {
+
       const td = document.createElement('td');
+
       td.contentEditable = true;
+
       td.innerText = row[field];
+
       td.oninput = (e) => {
+
         row[field] = e.target.innerText;
+
         validateRow(row);
+
         render();
+
       };
+
       tr.appendChild(td);
+
     });
 
     const errTd = document.createElement('td');
+
     errTd.innerText = row.error;
+
     tr.appendChild(errTd);
- 
-// ✅ ACTION BUTTON
-  const actionTd = document.createElement('td');
 
-  actionTd.innerHTML = `
-    <button onclick="editRow(${index})">Edit</button>
-    <button onclick="deleteRow(${index})">Delete</button>
-  `;
+    const actionTd = document.createElement('td');
 
-  tr.appendChild(actionTd);
+    actionTd.innerHTML = `
+      <button onclick="editRow(${originalIndex})">
+        Edit
+      </button>
+
+      <button onclick="deleteRow(${originalIndex})">
+        Delete
+      </button>
+    `;
+
+    tr.appendChild(actionTd);
 
     if (!row.error) {
+
       valid++;
+
       total += Number(row.nominal);
+
     } else {
+
       error++;
+
     }
 
     tbody.appendChild(tr);
+
   });
 
   document.getElementById('validCount').innerText = valid;
+
   document.getElementById('errorCount').innerText = error;
+
   document.getElementById('totalNominal').innerText = total;
+
 }
 
 function generateTXT() {
