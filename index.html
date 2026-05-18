@@ -742,7 +742,10 @@ function generateTXT() {
   const blob = new Blob([content], { type: 'text/plain' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `result_FL_${bulan}${tgl}.txt`;
+  const mm = bulan.substring(0,2);
+  const yyyy = bulan.substring(2,6);
+
+  a.download = `result_FL_${yyyy}${mm}${tgl}.txt`;
   a.click();
 }
 function openModal() {
